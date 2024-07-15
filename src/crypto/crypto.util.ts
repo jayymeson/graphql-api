@@ -10,16 +10,18 @@ const secretKey = process.env.SECRET_KEY
       .update(String(process.env.SECRET_KEY))
       .digest('base64')
       .substr(0, 32)
-  : 'B0hqbCVkfJmowae34wnuvwN8c1H4lOh3'; // Garantindo que a chave tenha 32 bytes
-const iv = crypto.randomBytes(16);
+  : 'B0hqbCVkfJmowae34wnuvwN8c1H4lOh3';
 
 export function encrypt(text: string) {
+  const iv = crypto.randomBytes(16);
   const cipher = crypto.createCipheriv(algorithm, secretKey, iv);
   const encrypted = Buffer.concat([cipher.update(text), cipher.final()]);
-  return {
+  const result = {
     iv: iv.toString('hex'),
     content: encrypted.toString('hex'),
   };
+  console.log('Encrypted data:', result);
+  return result;
 }
 
 export function decrypt(hash: { iv: string; content: string }) {
@@ -32,6 +34,7 @@ export function decrypt(hash: { iv: string; content: string }) {
     decipher.update(Buffer.from(hash.content, 'hex')),
     decipher.final(),
   ]);
+  console.log('Decrypted data:', decrypted.toString());
   return decrypted.toString();
 }
 

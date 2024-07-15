@@ -1,31 +1,34 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
 import { CreateCatInput } from './dto/create-cat.input';
-import { encrypt } from '../crypto/crypto.util';
-
-interface EncryptedCat {
-  id: string;
-  name: { iv: string; content: string };
-  age: { iv: string; content: string };
-  breed: { iv: string; content: string };
-}
+import { Cat } from './models/cat.model';
+import { encrypt, decrypt } from '../crypto/crypto.util';
 
 @Injectable()
 export class CatsService {
-  private cats: EncryptedCat[] = [];
+  constructor(private prisma: PrismaService) {}
 
-  create(createCatInput: CreateCatInput): EncryptedCat {
-    const encryptedCat: EncryptedCat = {
-      id: Date.now().toString(),
-      name: encrypt(createCatInput.name),
-      age: encrypt(createCatInput.age.toString()),
-      breed: encrypt(createCatInput.breed),
-    };
+  async create(createCatInput: CreateCatInput): Promise<Cat> {
+    const encryptedName = encrypt(createCatInput.name);
+    const encryptedBreed = encrypt(createCatInput.breed);
 
-    this.cats.push(encryptedCat);
-    return encryptedCat;
+    return this.prisma.cat.create({
+      data: {
+        name: encryptedName.content,
+        age: createCatInput.age,
+        breed: encryptedBreed.content,
+        name_iv: encryptedName.iv,
+        breed_iv: encryptedBreed.iv,
+      },
+    });
   }
 
-  findAll(): EncryptedCat[] {
-    return this.cats;
+  async findAll(): Promise<Cat[]> {
+    const cats = await this.prisma.cat.findMany();
+    return cats.map((cat) => ({
+      ...cat,
+      name: decrypt({ iv: cat.name_iv, content: cat.name }),
+      breed: decrypt({ iv: cat.breed_iv, content: cat.breed }),
+    }));
   }
 }

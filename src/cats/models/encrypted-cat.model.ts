@@ -1,5 +1,5 @@
 export interface EncryptedCat {
-  id: string;
+  id: number;
   iv: string;
   content: string;
 }

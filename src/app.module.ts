@@ -3,6 +3,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { CatsModule } from './cats/cats.module';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { CatsModule } from './cats/cats.module';
       playground: true,
     }),
     CatsModule,
+    PrismaModule,
   ],
   controllers: [],
   providers: [],

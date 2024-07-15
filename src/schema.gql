@@ -3,9 +3,9 @@
 # ------------------------------------------------------
 
 type Cat {
-  id: String!
+  id: Int!
   name: String!
-  age: String!
+  age: Int!
   breed: String!
 }
 
@@ -19,6 +19,6 @@ type Mutation {
 
 input CreateCatInput {
   name: String!
-  age: Float!
+  age: Int!
   breed: String!
 }
