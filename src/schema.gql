@@ -3,9 +3,9 @@
 # ------------------------------------------------------
 
 type Cat {
-  id: ID!
+  id: String!
   name: String!
-  age: Float!
+  age: String!
   breed: String!
 }
 
