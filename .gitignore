@@ -54,3 +54,11 @@ pids
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Ignore apenas os arquivos cert.pem e key.pem na pasta secrets
+/secrets/cert.pem
+/secrets/key.pem
+
+# Não ignorar arquivos de exemplo na pasta secrets
+!/secrets/cert.pem.exemple
+!/secrets/key.pem.exemple

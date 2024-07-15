@@ -8,7 +8,9 @@ export class CatsResolver {
   constructor(private readonly catsService: CatsService) {}
 
   @Mutation(() => Cat)
-  async createCat(@Args('createCatInput') createCatInput: CreateCatInput) {
+  async createCat(
+    @Args('createCatInput') createCatInput: CreateCatInput,
+  ): Promise<Cat> {
     return this.catsService.create(createCatInput);
   }
 
